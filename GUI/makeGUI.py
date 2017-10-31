@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import usingKeras.loadModel as uk
-
+import TextAbstraction.TextModuleVer2 as textModule
 class Dialog(QDialog):
 
     def __init__(self):
@@ -40,11 +40,12 @@ class Dialog(QDialog):
         #인식결과 출력 label
         self.text_label = QLabel(self)
         self.text_label.setAlignment(Qt.AlignCenter)
-        self.text_label.setText("인식 결과 : ")
+        self.text_label.setText("")
+        self.text_label.setFixedSize(300, 100)
         self.mainLayout.addWidget(self.text_label)
 
         self.setLayout(self.mainLayout)
-        self.setWindowTitle("이미지 인식기")
+        self.setWindowTitle("이미지 관련 키워드 추출기")
 
     def setModelPath(self, path):
         self.modelPath = path
@@ -90,7 +91,17 @@ class Dialog(QDialog):
         resizedLoadImagePath = './resizedLoadImg.jpg'
         self.resizeImg(self.loadFileName, (150, 150), resizedLoadImagePath)
         pred = uk.recognizeImage(self.model, resizedLoadImagePath)
-        self.text_label.setText("인식 결과 : {}".format(pred))
+        # keyword_str = "keyword"
+        keyword_str = textModule.makeResult(pred)
+        # print(keyword_str)
+        # self.text_label.setText("인식 결과 : {}".format(pred))
+        # print(pred)
+
+        # print(keyword_str)
+        self.text_label.setText("키워드 : \n{}".format(keyword_str))
+
+
+        return
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
