@@ -5,8 +5,11 @@ from PIL import Image
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import KeywordExtractor.KeywordExtractor as k_ext
 import usingKeras.loadModel as uk
-import TextAbstraction.TextModuleVer2 as textModule
+
+
+# import TextAbstraction.TextModuleVer2 as textModule
 class Dialog(QDialog):
 
     def __init__(self):
@@ -91,17 +94,17 @@ class Dialog(QDialog):
         resizedLoadImagePath = './resizedLoadImg.jpg'
         self.resizeImg(self.loadFileName, (150, 150), resizedLoadImagePath)
         pred = uk.recognizeImage(self.model, resizedLoadImagePath)
+        kmodule = k_ext.KwordModule()
+        keywords_str = kmodule.toSummary(pred, 3, 10)
         # keyword_str = "keyword"
-        keyword_str = textModule.makeResult(pred)
+        # keyword_str = textModule.makeResult(pred)
         # print(keyword_str)
         # self.text_label.setText("인식 결과 : {}".format(pred))
         # print(pred)
 
         # print(keyword_str)
-        self.text_label.setText("키워드 : \n{}".format(keyword_str))
+        self.text_label.setText("이미지 인식 결과 : {}\n키워드 : \n{}".format(pred, keywords_str))
 
-
-        return
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
